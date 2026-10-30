@@ -1,10 +1,11 @@
 #include "player.hpp"
 #include "nomes.hpp"
-
+#include <cstdlib>
+#include <ctime>
 
 int main()
 {
-
+    
     srand(time(0));
 
 
@@ -14,8 +15,8 @@ int main()
         for (size_t i=0; i<armas.size(); i++) //armas tem que ser maior q nomes ^^
         {
 
-            float life=rand()%100;
-            float attack=rand()%10;
+            float life = rand() % 51 + 50;
+            float attack=rand()%11;
             float defense=rand()%2;
             float dano=rand()%5;
             float critico;
