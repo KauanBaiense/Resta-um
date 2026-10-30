@@ -126,7 +126,11 @@ public:
              critico=rand()%10;
              float AcertoCritico =1;
 
-
+             //Premisa 1: Conseguir romper a defesa do oponente 
+             //Premisa 2: Cada arma tem um dado de tamanho diferente para causar dano, e pode critar dependendo da arma
+             //Classe Weapon e player usa weapon
+             //Curar metade da vida(maybe)
+             //Iniciativa de cada player
 
              if(critico == AcertoCritico)
              {
@@ -150,9 +154,6 @@ public:
      }
 
  };
-
-
-
 
 
 
