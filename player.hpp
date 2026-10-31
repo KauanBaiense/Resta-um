@@ -63,49 +63,87 @@ public:
      float m_dano, m_velocidade, m_critico;
 
  public:
-     Armas(string nome, float dano, float critico, float velocidade)
+     Armas(string nomeArma, float danoArma, float criticoArma, float velocidade)
      {
-         m_nome = nome;
-         m_dano = dano;
+         m_nome = nomeArma;
+         m_dano = danoArma;
          m_velocidade = velocidade;
-         m_critico = critico;
+         m_critico = criticoArma;
     }
 
     //getters e setters
-     string Getnome()
+     string GetnomeArma()
     {
         return m_nome;
     }
-    float Getdano()
+    float GetdanoArma()
     {
         return m_dano;
     }
-     float Getvelocidade()
+     float GetvelocidadeArma()
     {
         return m_velocidade;
     }
-    float Getcritico()
+    float GetcriticoArma()
     {
         return m_critico;
     }
 
  };
+
+ class Escudos
+ {
+ private:
+     string m_Escnome;
+     float m_Escdefesa, m_Escblock, m_Escvida;
+ public:
+     Escudos(string Escnome, float Escblock,float Escdefesa, float Escvida)
+     {
+         m_Escnome = Escnome;
+         m_Escblock = Escblock;
+         m_Escdefesa = Escdefesa;
+         m_Escvida = Escvida;
+    }
+
+
+     string GetEscnome()
+     {
+         return m_Escnome;
+     }
+
+
+     float GetEscblock()
+     {
+         return m_Escblock;
+     }
+    float GetEscvida()
+{
+    return m_Escvida;
+}
+
+     float GetEscdefesa()
+     {
+         return m_Escdefesa;
+     }
+
+};
+
+
  class Player
  {
 
  private:
 
-
-
  public:
      Armas arma;
      Lutadores lutador;
+     Escudos escudo;
 
-     Player(string nome, float life, float attack, float defense,string nomeArma, float dano, float critico, float velocidade, float esquiva)
-     : arma(nomeArma, dano, critico, velocidade),
-       lutador(nome, life, attack, defense, esquiva)
-     {
-    }
+     Player(string nome, float life, float attack, float defense,string nomeArma, float danoArma, float criticoArma,float esquiva, float velocidadeArma, string Escnome , float Escblock, float Escdefesa, float Escvida)
+     : arma(nomeArma, danoArma, criticoArma, velocidadeArma),
+       lutador(nome, life, attack, defense, esquiva),
+       escudo(Escnome, Escblock, Escdefesa, Escvida)
+     {}
 
 
 
@@ -117,31 +155,27 @@ public:
          float esquiva = opponent.lutador.Getesquiva();
          esquiva=rand()%15;
 
-         if((lutador.Getattack() + arma.Getdano()) > esquiva)
+         if((lutador.Getattack() + arma.GetdanoArma()) > esquiva)
          {
              //PREMISSA 2: Rolar um crit :)
 
              float novoValorLife;
-             float critico = arma.Getcritico();
+             float critico = arma.GetcriticoArma();
              critico=rand()%10;
              float AcertoCritico =1;
 
-             //Premisa 1: Conseguir romper a defesa do oponente 
-             //Premisa 2: Cada arma tem um dado de tamanho diferente para causar dano, e pode critar dependendo da arma
-             //Classe Weapon e player usa weapon
-             //Curar metade da vida(maybe)
-             //Iniciativa de cada player
+
 
              if(critico == AcertoCritico)
              {
                  cout <<"tu critou!" << endl;
-                 novoValorLife = opponent.lutador.Getlife() - (2*(arma.Getdano() + lutador.Getattack())); //se o crit hitar o dano vira x2
+                 novoValorLife = opponent.lutador.Getlife() - (2*(arma.GetdanoArma() + lutador.Getattack())); //se o crit hitar o dano vira x2
                  opponent.lutador.SetLife(novoValorLife);
                  return true;
              }
              else
              {
-             novoValorLife = opponent.lutador.Getlife() - ((arma.Getdano() + lutador.Getattack())-opponent.lutador.Getdefense());
+             novoValorLife = opponent.lutador.Getlife() - ((arma.GetdanoArma() + lutador.Getattack())-opponent.lutador.Getdefense());
              opponent.lutador.SetLife(novoValorLife);
              return true;
              }
@@ -154,6 +188,8 @@ public:
      }
 
  };
+
+
 
 
 
