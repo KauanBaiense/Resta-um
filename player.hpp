@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -63,11 +64,11 @@ public:
      float m_dano, m_velocidade, m_critico;
 
  public:
-     Armas(string nomeArma, float danoArma, float criticoArma, float velocidade)
+     Armas(string nomeArma, float danoArma, float velocidadeArma, float criticoArma)
      {
          m_nome = nomeArma;
          m_dano = danoArma;
-         m_velocidade = velocidade;
+         m_velocidade = velocidadeArma;
          m_critico = criticoArma;
     }
 
@@ -145,52 +146,35 @@ public:
        escudo(Escnome, Escblock, Escdefesa, Escvida)
      {}
 
-
-
-
-      bool Attack(Player &opponent)
+     bool Attack(vector<Player>& alvos, int indice)
      {
-         //PREMISSA 1: CONSEGUIR Passar pela esquiva :)
-
-         float esquiva = opponent.lutador.Getesquiva();
-         esquiva=rand()%15;
-
-         if((lutador.Getattack() + arma.GetdanoArma()) > esquiva)
-         {
-             //PREMISSA 2: Rolar um crit :)
-
-             float novoValorLife;
-             float critico = arma.GetcriticoArma();
-             critico=rand()%10;
-             float AcertoCritico =1;
-
-
-
-             if(critico == AcertoCritico)
-             {
-                 cout <<"tu critou!" << endl;
-                 novoValorLife = opponent.lutador.Getlife() - (2*(arma.GetdanoArma() + lutador.Getattack())); //se o crit hitar o dano vira x2
-                 opponent.lutador.SetLife(novoValorLife);
-                 return true;
-             }
-             else
-             {
-             novoValorLife = opponent.lutador.Getlife() - ((arma.GetdanoArma() + lutador.Getattack())-opponent.lutador.Getdefense());
-             opponent.lutador.SetLife(novoValorLife);
-             return true;
-             }
-         }
-         else
-             cout << "o jogador se esquivou " << endl;
-
+         if (indice < 0 || indice >= alvos.size())
              return false;
 
+         Player& opponent = alvos[indice];
+
+         if (lutador.Getattack() + arma.GetdanoArma() <= rand() % 15)
+         {
+             cout << "o jogador se esquivou" << endl;
+             return false;
+         }
+
+         float dano = arma.GetdanoArma() + lutador.Getattack();
+
+         if (rand() % 10 == 1)
+         {
+             cout << "tu critou!" << endl;
+             dano *= 2;
+         }
+         else
+         {
+             dano -= opponent.lutador.Getdefense();
+         }
+
+         opponent.lutador.SetLife(opponent.lutador.Getlife() - dano);
+         return true;
      }
-
  };
-
-
-
 
 
 
