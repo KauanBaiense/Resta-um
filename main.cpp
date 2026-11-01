@@ -108,7 +108,7 @@ void Luta(vector<Player>& grupo1, vector<Player>& grupo2)
             //critical-hit starts here
             int chanceCritico = rand() % 100;
             
-            if (jogador1.IsHero() && chanceCritico > 20 && grupo2.size() > 1) 
+            if (jogador1.IsHero() && chanceCritico > 20 && grupo2.size() > 2) 
             {
                 cout << "I am the storm that is approaching!!!(CRITOOOUU EM GRUPO)" << endl;
                 vector<size_t> indicesAfetados;
@@ -162,7 +162,7 @@ void Luta(vector<Player>& grupo1, vector<Player>& grupo2)
 
             int chanceCritico = rand() %100;
 
-            if (jogador2.IsHero() && chanceCritico > 20 && grupo1.size() > 1)
+            if (jogador2.IsHero() && chanceCritico > 20 && grupo1.size() > 2)
             {
                 cout << "I am the storm that is approaching!!!(CRITOOOUU EM GRUPO)" << endl;
                 vector<size_t> indicesAfetados;
