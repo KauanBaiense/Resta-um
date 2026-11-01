@@ -240,7 +240,7 @@ void EscolherLuta()
 
     if (equipe1->empty() || equipe2->empty())
     {
-        cout << "Algum dos grupos não tem ninguem, adicione guerreiros ou chame o Ragnarok!" << endl;
+        cout << "Algum dos grupos não tem ninguem, adicione guerreiros ou chame o Day of the Dead!" << endl;
         return;
     }
 
@@ -367,26 +367,32 @@ void EscolherLuta()
                         switch(option)
                         {
                             case 1:
+                                system("clear");
                                 RemoverHumano(Mankind, humanos);
                                 break;
                             case 2:
+                                system("clear");
                                 RemoverOrcs(Horde, orcs);
                                 break;
                             case 3:
+                                system("clear");
                                 RemoverElfos(Folk, elfos);
                                 break;
                             case 4:
+                                system("clear");
                                 RemoverDemonios(Cult, demonios);
                                 break;
                             case 5:
+                                system("clear");
                                 RemoverDraconatos(Clan, draconatos);
                                 break;
                             case 6:
+                                system("clear");
                                 break;
                             default:
                                 break;
                         }
-                        system("clear");
+
                         submenu();
                         break;
                     }
@@ -648,17 +654,8 @@ void EscolherLuta()
 
             SalvarDraconatos(Clan, draconatos);
             system("clear");
-            cout << "        Um dragão novo foi trazido ao mundo  " << endl;
+            cout << "        Um dragão novo foi trazido ao mundo!  " << endl;
         }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -854,14 +851,6 @@ void EscolherLuta()
             raaaw.close();
         }
 
-
-
-
-
-
-
-
-
         void RemoverHumano(vector<string>& Mankind, vector<Player>& humanos)
         {
             int ind;
@@ -961,12 +950,12 @@ void EscolherLuta()
 
             if(ind >= 0 && ind < demonios.size())
             {
-                Folk.erase(Horde.begin() + ind);
-                demonios.erase(orcs.begin() + ind);
+                Cult.erase(Cult.begin() + ind);
+                demonios.erase(demonios.begin() + ind);
 
                 SalvarDemonios(Cult, demonios);
 
-                cout << "Ele voltou pro lugar de onde nunca devia ter saido." << endl << endl;
+                cout << endl <<"  ELE VOLTOU PRO LUGAR DE ONDE NUNCA DEVIA TER SAIDO! " << endl << endl;
             }
             else
             {
@@ -994,7 +983,7 @@ void EscolherLuta()
 
                 SalvarDraconatos(Horde, orcs);
 
-                cout << "MONSTRO CAIDO !" << endl << endl;
+                cout << endl << "        MONSTRO CAIDO !" << endl << endl;
             }
             else
             {
@@ -1072,7 +1061,7 @@ void EscolherLuta()
             }
             else
                 system ("clear");
-                cout << "A orda não possui guerreiros" << endl << endl;
+                cout << "A Horda não possui guerreiros" << endl << endl;
 
 
         }
@@ -1107,7 +1096,7 @@ void EscolherLuta()
             }
             else
                 system ("clear");
-                cout << "A orda não possui guerreiros" << endl << endl;
+                cout << "A Conclave não possui membros" << endl << endl;
 
 
         }
@@ -1142,7 +1131,7 @@ void EscolherLuta()
             }
             else
                 system ("clear");
-                cout << "A orda não possui guerreiros" << endl << endl;
+                cout << "Nenhum membro da legião foi invocado " << endl << endl;
 
 
         }
@@ -1178,10 +1167,14 @@ void EscolherLuta()
             }
             else
                 system ("clear");
-                cout << "A orda não possui guerreiros" << endl << endl;
+                cout << "Nenhum ovo de draconato foi chocado" << endl << endl;
 
 
         }
+
+
+
+
 
 
         void GerarHumanos(vector<string>& Mankind, vector<Player>& humanos)
@@ -1345,7 +1338,6 @@ void EscolherLuta()
                 );
             }
         }
-
 
 
 
