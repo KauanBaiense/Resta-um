@@ -9,31 +9,70 @@ void submenu();
 
 void GerarOrcs(vector<string>& Horde, vector<Player>& orcs);
 void GerarHumanos(vector<string>& Mankind, vector<Player>& humanos);
+//-- novo
+void GerarElfos(vector<string>& Folk, vector<Player>&elfos);
+void GerarDemonios(vector<string>& Cult, vector<Player>&demonios);
+void GerarDraconatos(vector<string>&Clan, vector<Player>&draconatos);
+
+
 
 void CarregarHumanos(vector<string>& Mankind, vector<Player>& humanos);
 void CarregarOrcs(vector<string>& Horde, vector<Player>& orcs);
+void CarregarElfos(vector<string>& Folk, vector<Player>&elfos);
+void CarregarDemonios(vector<string>& Cult, vector<Player>&demonios);
+void CarregarDraconatos(vector<string>&Clan, vector<Player>&draconatos);
+
+
+
 
 void SalvarHumanos(vector<string>& Mankind, vector<Player>& humanos);
 void SalvarOrcs(vector<string>& Horde, vector<Player>& orcs);
+void SalvarElfos(vector<string>& Folk, vector<Player>&elfos);
+void SalvarDemonios(vector<string>& Cult, vector<Player>&demonios);
+void SalvarDraconatos(vector<string>&Clan, vector<Player>&draconatos);
+
 
 void RemoverHumano(vector<string>& Mankind, vector<Player>& humanos);
 void RemoverOrcs(vector<string>& Horde, vector<Player>& orcs);
+void RemoverElfos(vector<string>& Folk, vector<Player>&elfos);
+void RemoverDemonios(vector<string>& Cult, vector<Player>&demonios);
+void RemoverDraconatos(vector<string>&Clan, vector<Player>&draconatos);
+
+
+
+
 
 void AdicionarHumano(vector<string>& Mankind, vector<Player>& humanos);
 void AdicionarOrc(vector<string>& Horde, vector<Player>& orcs);
+void AdicionarElfos(vector<string>& Folk, vector<Player>&elfos);
+void AdicionarDemonios(vector<string>& Cult, vector<Player>&demonios);
+void AdicionarDraconatos(vector<string>&Clan, vector<Player>&draconatos);
 
-void Luta(vector<Player>& humanos, vector<Player>& orcs);
 
+
+void Luta(vector<Player>& grupo1, vector<Player>& grupo2);
+void EscolherLuta();
 
 
 
 void ListarHumanos(vector<Player>& humanos);
 void ListarOrcs(vector<Player>& orcs);
+void ListarElfos(vector<Player>&elfos);
+void ListarDemonios(vector<Player>&demonios);
+void ListarDraconatos(vector<Player>&draconatos);
+
+
 
 vector<string> Mankind;
 vector<Player> humanos;
 vector<string> Horde;
 vector<Player> orcs;
+vector<string> Folk;
+vector<Player> elfos;
+vector<string> Cult;
+vector<Player> demonios;
+vector<string> Clan;
+vector<Player> draconatos;
 
 
 
@@ -42,6 +81,9 @@ int main()
 
     CarregarHumanos(Mankind, humanos);
     CarregarOrcs(Horde, orcs);
+    CarregarElfos(Folk, elfos);
+    CarregarDemonios(Cult, demonios);
+    CarregarDraconatos(Clan, draconatos);
 
     srand(time(0));
 
@@ -50,95 +92,168 @@ int main()
 }
 
 
-void Luta(vector<Player>& humanos, vector<Player>& orcs)
+void Luta(vector<Player>& grupo1, vector<Player>& grupo2)
 {
-    while (!humanos.empty() && !orcs.empty())
+    while (!grupo1.empty() && !grupo2.empty())
     {
-        size_t i = rand() % humanos.size();
-        size_t j = rand() % orcs.size();
+        size_t i = rand() % grupo1.size();
+        size_t j = rand() % grupo2.size();
 
-        Player& humano = humanos[i];
-        Player& orc = orcs[j];
+        Player& jogador1 = grupo1[i];
+        Player& jogador2 = grupo2[j];
 
-        auto humanoAtaca = [&]()
+        auto jogador1Ataca = [&]()
         {
-            cout << "Lutador " << humano.lutador.Getname()
-            << " atacando " << orc.lutador.Getname() << "....";
+            cout << "Lutador " << jogador1.lutador.Getname()
+            << " atacando " << jogador2.lutador.Getname() << "....";
 
-            bool status = humano.Attack(orcs, j);
+            bool status = jogador1.Attack(grupo2, j);
 
             if (status)
             {
                 cout << "ataque bem-sucedido" << endl;
 
-                if (orc.lutador.Getlife() <= 0)
+                if (jogador2.lutador.Getlife() <= 0)
                 {
-                    cout << "Fera abatida: "
-                    << orc.lutador.Getname() << endl;
-                    orcs.erase(orcs.begin() + j);
+                    cout << "Lutador abatido: "
+                    << jogador2.lutador.Getname() << endl;
+
+                    grupo2.erase(grupo2.begin() + j);
                     return;
                 }
 
                 cout << "vida restante: "
-                << orc.lutador.Getlife() << endl;
+                << jogador2.lutador.Getlife() << endl;
             }
         };
 
-        auto orcAtaca = [&]()
+        auto jogador2Ataca = [&]()
         {
-            cout << "Lutador " << orc.lutador.Getname()
-            << " atacando " << humano.lutador.Getname() << "....";
+            cout << "Lutador " << jogador2.lutador.Getname()
+            << " atacando " << jogador1.lutador.Getname() << "....";
 
-            bool status = orc.Attack(humanos, i);
+            bool status = jogador2.Attack(grupo1, i);
 
             if (status)
             {
                 cout << "ataque bem-sucedido" << endl;
 
-                if (humano.lutador.Getlife() <= 0)
+                if (jogador1.lutador.Getlife() <= 0)
                 {
-                    cout << "Humano abatido: "
-                    << humano.lutador.Getname() << endl;
-                    humanos.erase(humanos.begin() + i);
+                    cout << "Lutador abatido: "
+                    << jogador1.lutador.Getname() << endl;
+
+                    grupo1.erase(grupo1.begin() + i);
                     return;
                 }
 
                 cout << "vida restante: "
-                << humano.lutador.Getlife() << endl;
+                << jogador1.lutador.Getlife() << endl;
             }
         };
 
-        if (humano.arma.GetvelocidadeArma() >=
-            orc.arma.GetvelocidadeArma())
+        if (jogador1.arma.GetvelocidadeArma() >=
+            jogador2.arma.GetvelocidadeArma())
         {
-            humanoAtaca();
+            jogador1Ataca();
 
-            if (!orcs.empty() && !humanos.empty())
-                orcAtaca();
+            if (!grupo2.empty() && !grupo1.empty())
+                jogador2Ataca();
         }
         else
         {
-            orcAtaca();
+            jogador2Ataca();
 
-            if (!humanos.empty() && !orcs.empty())
-                humanoAtaca();
+            if (!grupo1.empty() && !grupo2.empty())
+                jogador1Ataca();
         }
     }
 
-    if (humanos.empty())
-        cout << "WINNER: Orcs" << endl;
+    if (grupo1.empty())
+    {
+        cout << "O vencedor foi: " << endl;
+        cout << grupo2[0].lutador.Getname() << endl;
+    }
     else
-        cout << "WINNER: " << humanos[0].lutador.Getname() << endl;
+    {
+        cout << "O vencedor foi: " <<  endl;
+        cout << grupo1[0].lutador.Getname() << endl;
+    }
 }
 
+void EscolherLuta()
+{
+    int escolha1, escolha2;
+
+    vector<Player>* equipe1 = nullptr; //lembrar desses ponteiros
+    vector<Player>* equipe2 = nullptr;
+
+    cout << "Escolha sua batalha" << endl;
+
+    cout << "1 - Humanos" << endl;
+    cout << "2 - Orcs" << endl;
+    cout << "3 - Elfos" << endl;
+    cout << "4 - Demonios" << endl;
+    cout << "5 - Draconatos" << endl;
+
+    cout << "Escolha o primeiro grupo: ";
+    cin >> escolha1;
+
+    cout << "Escolha o segundo grupo: ";
+    cin >> escolha2;
+
+    if (escolha1 < 1 || escolha1 > 5 ||
+        escolha2 < 1 || escolha2 > 5 ||
+        escolha1 == escolha2)
+    {
+        cout << "Escolha invalida!\n";
+        return;
+    }
+
+    switch (escolha1)
+    {
+        case 1: equipe1 = &humanos;
+        break;
+        case 2: equipe1 = &orcs;
+        break;
+        case 3: equipe1 = &elfos;
+        break;
+        case 4: equipe1 = &demonios;
+        break;
+        case 5: equipe1 = &draconatos;
+        break;
+    }
+
+    switch (escolha2)
+    {
+        case 1: equipe2 = &humanos;
+        break;
+        case 2: equipe2 = &orcs;
+        break;
+        case 3: equipe2 = &elfos;
+        break;
+        case 4: equipe2 = &demonios;
+        break;
+        case 5: equipe2 = &draconatos;
+        break;
+    }
+
+    if (equipe1->empty() || equipe2->empty())
+    {
+        cout << "Algum dos grupos não tem ninguem, adicione guerreiros ou chame o Ragnarok!" << endl;
+        return;
+    }
+
+    Luta(*equipe1, *equipe2);
+}
 
 
         void menu()
 
         {
-            int opt;
+            int opt = 0;
             submenu();
-            while (opt != 9)
+            while (opt != 6)
             {
 
                 cin >> opt;
@@ -147,10 +262,47 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
 
                 switch(opt)
                 {
-                    case 1: //colocar nome novo no humaninho
+                    case 1:
                     {
+                        int option = 0;
                         system("clear");
-                        AdicionarHumano(Mankind, humanos);
+                        cout << "1. Criar um humano" << endl;
+                        cout << "2. Adicionar um orc" << endl;
+                        cout << "3. Achar um elfo" << endl;
+                        cout << "4. Invocar um demonio" << endl;
+                        cout << "5. Chocar um draconato" << endl;
+                        cout << "6. voltar ao menu" << endl;
+                        cin >> option;
+                        cin.ignore();
+
+                        switch(option)
+                        {
+                            case 1:
+                                system("clear");
+                                AdicionarHumano(Mankind, humanos);
+                                break;
+                            case 2:
+                                system("clear");
+                                AdicionarOrc(Horde, orcs);
+                                break;
+                            case 3:
+                                system("clear");
+                                AdicionarElfos(Folk, elfos);
+                                break;
+                            case 4:
+                                system("clear");
+                                AdicionarDemonios(Cult, demonios);
+                                break;
+                            case 5:
+                                system("clear");
+                                AdicionarDraconatos(Clan, draconatos);
+                                break;
+                            case 6:
+                                system("clear");
+                                break;
+                            default:
+                            break;
+                        }
                         cout << endl;
                         submenu();
                         break;
@@ -158,18 +310,82 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
 
                     case 2: //colocar nome novo pros orcs
                     {
+
+                        int opt = 0;
                         system("clear");
-                        AdicionarOrc(Horde, orcs);
-                        cout << endl;
+                        cout << "1. Listar humanos" << endl;
+                        cout << "2. Listar orcs" << endl;
+                        cout << "3. Listar elfos" << endl;
+                        cout << "4. Listas demonios" << endl;
+                        cout << "5. Listar draconatos" << endl;
+                        cout << "6. voltar ao menu" << endl;
+                        cin >> opt;
+                        cin.ignore();
+
+                        switch(opt)
+                        {
+                            case 1:
+                                ListarHumanos(humanos);
+                                break;
+                            case 2:
+                                ListarOrcs(orcs);
+                                break;
+                            case 3:
+                                ListarElfos(elfos);
+                                break;
+                            case 4:
+                                ListarDemonios(demonios);
+                                break;
+                            case 5:
+                                ListarDraconatos(draconatos);
+                                break;
+                            case 6:
+                                break;
+                            default:
+                                break;
+                        }
+
                         submenu();
                         break;
                     }
 
                     case 3: //mostrar todos os lutadores
                     {
+
+                        int option;
                         system("clear");
-                        ListarHumanos(humanos);
-                        cout << endl;
+                        cout << "1. Remover um humano." << endl;
+                        cout << "2. Remover um orc" << endl;
+                        cout << "3. Remover um elfo" << endl;
+                        cout << "4. Remover um demonio" << endl;
+                        cout << "5. Remover um draconato" << endl;
+                        cout << "6. voltar ao menu" << endl;
+                        cin >> option;
+                        cin.ignore();
+
+                        switch(option)
+                        {
+                            case 1:
+                                RemoverHumano(Mankind, humanos);
+                                break;
+                            case 2:
+                                RemoverOrcs(Horde, orcs);
+                                break;
+                            case 3:
+                                RemoverElfos(Folk, elfos);
+                                break;
+                            case 4:
+                                RemoverDemonios(Cult, demonios);
+                                break;
+                            case 5:
+                                RemoverDraconatos(Clan, draconatos);
+                                break;
+                            case 6:
+                                break;
+                            default:
+                                break;
+                        }
+                        system("clear");
                         submenu();
                         break;
                     }
@@ -177,51 +393,28 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
                     case 4:
                     {
                         system("clear");
-                        ListarOrcs(orcs);
+                        EscolherLuta();
                         cout << endl;
                         submenu();
                         break;
                     }
+
 
                     case 5:
-                    {
-                        system("clear");
-                        RemoverHumano(Mankind, humanos);
-                        cout << endl;
-                        submenu();
-                        break;
-                    }
-
-                    case 6:
-                    {
-                        system("clear");
-                        RemoverOrcs(Horde, orcs);
-                        cout << endl;
-                        submenu();
-                        break;
-                    }
-
-                    case 7:
-                    {
-                        system("clear");
-                        Luta(humanos, orcs);
-                        cout << endl;
-                        submenu();
-                        break;
-                    }
-
-                    case 8:
                     {
                      system("clear");
                      cout << "Fantasmas de Valhala ";
                      GerarOrcs(Horde, orcs);
                      GerarHumanos(Mankind, humanos);
+                     GerarElfos(Folk, elfos);
+                     GerarDemonios(Cult, demonios);
+                     GerarDraconatos(Clan, draconatos);
                      cout << endl;
                      submenu();
                      break;
 
                     }
-                    case 9:
+                    case 6:
                     {
                         cout << "saindo... ";
                         break;
@@ -237,15 +430,12 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
         void submenu()
         {
 
-            cout << "1.Adicione um novo lutador para a humanidade" << endl;
-            cout << "2.Incorporar um novo guerreiro a orda" << endl;
-            cout << "3.Mostrar todos os guerreiros da humanidade"<< endl;
-            cout << "4.Revelar Horda"<<endl;
-            cout << "5.Obliterar um guerreiro humano" << endl;
-            cout << "6.Caçar um monstro"<<endl;
-            cout << "7.Iniciar o Ragnarok" << endl;
-            cout << "8.Day of the Dead" << endl;
-            cout << "9.Sair" << endl;
+            cout << "1.Adicionar um guerreiro" << endl;
+            cout << "2.Mostar listas"<< endl;
+            cout << "3. Obliterar um escolhido" << endl;
+            cout << "4.Iniciar o Ragnarok" << endl;
+            cout << "5.Day of the Dead" << endl;
+            cout << "6.Sair" << endl;
         }
 
         void AdicionarHumano(vector<string>& Mankind, vector<Player>& humanos)
@@ -289,6 +479,9 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             cout << "         ESTÁ BRINCANDO DE DEUS ? 0_0 " << endl;
         }
 
+
+
+
         void AdicionarOrc(vector<string>& Horde, vector<Player>& orcs)
         {
             string nome, nomeArma, Escnome;
@@ -326,7 +519,133 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
              Escnome, Escblock, Escdefesa, Escvida);
 
 
-            SalvarHumanos(Horde, orcs);
+            SalvarOrcs(Horde, orcs);
+            system("clear");
+            cout << "        USANDO MAGIA PROIBIDA ? ISSO TERA CONSEQUENCIAS 0_0  " << endl;
+        }
+
+        void AdicionarElfos(vector<string>& Folk, vector<Player>& elfos)
+        {
+            string nome, nomeArma, Escnome;
+
+            float life, attack, defense, esquiva, danoArma, criticoArma, velocidade, Escblock, Escdefesa, Escvida;
+
+            cout << "Nome do elfo: ";
+            getline(cin, nome);
+
+
+            life = rand()%1;
+            attack = rand()%1;
+            defense = rand()%1;
+            esquiva = rand()%1;
+
+            cout <<  "De nome a arma: ";
+            getline(cin, nomeArma);
+            danoArma = rand()%1;
+            criticoArma = rand()%1;
+            velocidade = rand()%1;
+
+            cout << "De nome ao escudo:";
+            getline(cin, Escnome);
+            Escblock = rand()%1;
+            Escdefesa = rand()%1;
+            Escvida = rand()%1;
+
+            Folk.push_back(nome);
+
+            elfos.emplace_back
+            (
+                nome, life, attack, defense,
+             nomeArma, danoArma, criticoArma,
+             esquiva, velocidade,
+             Escnome, Escblock, Escdefesa, Escvida);
+
+
+            SalvarElfos(Folk, elfos);
+            system("clear");
+            cout << "        USANDO MAGIA PROIBIDA ? ISSO TERA CONSEQUENCIAS 0_0  " << endl;
+        }
+
+        void AdicionarDemonios(vector<string>& Cult, vector<Player>& demonios)
+        {
+            string nome, nomeArma, Escnome;
+
+            float life, attack, defense, esquiva, danoArma, criticoArma, velocidade, Escblock, Escdefesa, Escvida;
+
+            cout << "Nome do satanas: ";
+            getline(cin, nome);
+
+
+            life = rand()%1;
+            attack = rand()%1;
+            defense = rand()%1;
+            esquiva = rand()%1;
+
+            cout <<  "De nome ao cetro do capeta: ";
+            getline(cin, nomeArma);
+            danoArma = rand()%1;
+            criticoArma = rand()%1;
+            velocidade = rand()%1;
+
+            cout << "De nome ao escudo do diabo:";
+            getline(cin, Escnome);
+            Escblock = rand()%1;
+            Escdefesa = rand()%1;
+            Escvida = rand()%1;
+
+            Cult.push_back(nome);
+
+            demonios.emplace_back
+            (
+                nome, life, attack, defense,
+             nomeArma, danoArma, criticoArma,
+             esquiva, velocidade,
+             Escnome, Escblock, Escdefesa, Escvida);
+
+
+            SalvarDemonios(Cult, demonios);
+            system("clear");
+            cout << "        USANDO MAGIA PROIBIDA ? ISSO TERA CONSEQUENCIAS 0_0  " << endl;
+        }
+
+        void AdicionarDraconatos(vector<string>& Clan, vector<Player>& draconatos)
+        {
+            string nome, nomeArma, Escnome;
+
+            float life, attack, defense, esquiva, danoArma, criticoArma, velocidade, Escblock, Escdefesa, Escvida;
+
+            cout << "Nome do dagrão: ";
+            getline(cin, nome);
+
+
+            life = rand()%1;
+            attack = rand()%1;
+            defense = rand()%1;
+            esquiva = rand()%1;
+
+            cout <<  "De nome a garra: ";
+            getline(cin, nomeArma);
+            danoArma = rand()%1;
+            criticoArma = rand()%1;
+            velocidade = rand()%1;
+
+            cout << "De nome as escamas:";
+            getline(cin, Escnome);
+            Escblock = rand()%1;
+            Escdefesa = rand()%1;
+            Escvida = rand()%1;
+
+            Clan.push_back(nome);
+
+            draconatos.emplace_back
+            (
+                nome, life, attack, defense,
+             nomeArma, danoArma, criticoArma,
+             esquiva, velocidade,
+             Escnome, Escblock, Escdefesa, Escvida);
+
+
+            SalvarDraconatos(Clan, draconatos);
             system("clear");
             cout << "        USANDO MAGIA PROIBIDA ? ISSO TERA CONSEQUENCIAS 0_0  " << endl;
         }
@@ -381,6 +700,82 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             arquivo.close();
         }
 
+        void CarregarElfos(vector<string>& Folk, vector<Player>& elfos)
+        {
+            ifstream arquivo("elfos.txt");
+            int indice;
+
+            string nome, nomeArma, nomeEscudo;
+
+            float life, attack, defense, esquiva;
+            float danoArma, criticoArma, velocidade;
+            float Escblock, Escdefesa, Escvida;
+
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            {
+                Folk.push_back(nome);
+
+                elfos.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    nomeEscudo, Escblock, Escdefesa, Escvida);
+            }
+
+            arquivo.close();
+        }
+
+        void CarregarDemonios(vector<string>& Cult, vector<Player>& demonios)
+        {
+            ifstream arquivo("Demonios.txt");
+            int indice;
+
+            string nome, nomeArma, nomeEscudo;
+
+            float life, attack, defense, esquiva;
+            float danoArma, criticoArma, velocidade;
+            float Escblock, Escdefesa, Escvida;
+
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            {
+                Cult.push_back(nome);
+
+                demonios.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    nomeEscudo, Escblock, Escdefesa, Escvida);
+            }
+
+            arquivo.close();
+        }
+
+        void CarregarDraconatos(vector<string>& Clan, vector<Player>& draconatos)
+        {
+            ifstream arquivo("draconatos.txt");
+            int indice;
+
+            string nome, nomeArma, nomeEscudo;
+
+            float life, attack, defense, esquiva;
+            float danoArma, criticoArma, velocidade;
+            float Escblock, Escdefesa, Escvida;
+
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            {
+                Clan.push_back(nome);
+
+                draconatos.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    nomeEscudo, Escblock, Escdefesa, Escvida);
+            }
+
+            arquivo.close();
+        }
+
+
         void SalvarHumanos(vector<string>& Mankind, vector<Player>& humanos)
         {
             ofstream alala("humanos.txt");
@@ -404,6 +799,45 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             }
 
             oinc.close();
+        }
+
+        void SalvarElfos(vector<string>& Folk, vector<Player>& elfos)
+        {
+            ofstream fadas("elfos.txt");
+
+            for(size_t i = 0; i < orcs.size(); i++)
+            {
+                fadas << i << " "<< elfos[i].lutador.Getname() << " " << elfos[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << elfos[i].lutador.Getdefense() << " " << elfos[i].lutador.Getesquiva() << " " << elfos[i].arma.GetnomeArma() << " " << elfos[i].arma.GetdanoArma() << " " << elfos[i].arma.GetcriticoArma() << " " << elfos[i].arma.GetvelocidadeArma() << " " << elfos[i].escudo.GetEscnome() << " " << elfos[i].escudo.GetEscblock() << " " << elfos[i].escudo.GetEscdefesa() << " " << elfos[i].escudo.GetEscvida() << endl;
+
+            }
+
+            fadas.close();
+        }
+
+        void SalvarDemonios(vector<string>& Cult, vector<Player>& demonios)
+        {
+            ofstream inferno("Demonios.txt");
+
+            for(size_t i = 0; i < demonios.size(); i++)
+            {
+                inferno << i << " "<< demonios[i].lutador.Getname() << " " << demonios[i].lutador.Getlife() << " " << demonios[i].lutador.Getattack() << " " << demonios[i].lutador.Getdefense() << " " << demonios[i].lutador.Getesquiva() << " " << demonios[i].arma.GetnomeArma() << " " << demonios[i].arma.GetdanoArma() << " " << demonios[i].arma.GetcriticoArma() << " " << demonios[i].arma.GetvelocidadeArma() << " " << demonios[i].escudo.GetEscnome() << " " << demonios[i].escudo.GetEscblock() << " " << demonios[i].escudo.GetEscdefesa() << " " << demonios[i].escudo.GetEscvida() << endl;
+
+            }
+
+            inferno.close();
+        }
+
+        void SalvarDraconatos(vector<string>& Clan, vector<Player>& draconatos)
+        {
+            ofstream raaaw("draconatos.txt");
+
+            for(size_t i = 0; i < draconatos.size(); i++)
+            {
+                raaaw << i << " "<< draconatos[i].lutador.Getname() << " " << draconatos[i].lutador.Getlife() << " " << draconatos[i].lutador.Getattack() << " " << draconatos[i].lutador.Getdefense() << " " << draconatos[i].lutador.Getesquiva() << " " << draconatos[i].arma.GetnomeArma() << " " << draconatos[i].arma.GetdanoArma() << " " << draconatos[i].arma.GetcriticoArma() << " " << draconatos[i].arma.GetvelocidadeArma() << " " << draconatos[i].escudo.GetEscnome() << " " << draconatos[i].escudo.GetEscblock() << " " << draconatos[i].escudo.GetEscdefesa() << " " << draconatos[i].escudo.GetEscvida() << endl;
+
+            }
+
+            raaaw.close();
         }
 
         void RemoverHumano(vector<string>& Mankind, vector<Player>& humanos)
@@ -462,6 +896,90 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             }
         }
 
+        void RemoverElfos(vector<string>& Folk, vector<Player>& elfos)
+        {
+            int ind;
+
+            for(size_t i = 0; i < elfos.size(); i++)
+            {
+                cout << i << " - "
+                << elfos[i].lutador.Getname() << endl;
+            }
+
+            cout << "Deidade a ser abatida ";
+            cin >> ind;
+
+            if(ind >= 0 && ind < elfos.size())
+            {
+                Folk.erase(Folk.begin() + ind);
+                elfos.erase(elfos.begin() + ind);
+
+                SalvarElfos(Folk, elfos);
+
+                cout << "MONSTRO CAIDO !" << endl << endl;
+            }
+            else
+            {
+                cout << "indice invalido !" << endl;
+            }
+        }
+
+        void RemoverDemonios(vector<string>& Cult, vector<Player>& demonios)
+        {
+            int ind;
+
+            for(size_t i = 0; i < demonios.size(); i++)
+            {
+                cout << i << " - "
+                << demonios[i].lutador.Getname() << endl;
+            }
+
+            cout << "Qual fera caçaremos hoje? ";
+            cin >> ind;
+
+            if(ind >= 0 && ind < demonios.size())
+            {
+                Folk.erase(Horde.begin() + ind);
+                demonios.erase(orcs.begin() + ind);
+
+                SalvarDemonios(Cult, demonios);
+
+                cout << "MONSTRO CAIDO !" << endl << endl;
+            }
+            else
+            {
+                cout << "indice invalido !" << endl;
+            }
+        }
+
+        void RemoverDraconatos(vector<string>& Clan, vector<Player>& draconatos)
+        {
+            int ind;
+
+            for(size_t i = 0; i < draconatos.size(); i++)
+            {
+                cout << i << " - "
+                << draconatos[i].lutador.Getname() << endl;
+            }
+
+            cout << "Qual fera caçaremos hoje? ";
+            cin >> ind;
+
+            if(ind >= 0 && ind < draconatos.size())
+            {
+                Clan.erase(Clan.begin() + ind);
+                draconatos.erase(draconatos.begin() + ind);
+
+                SalvarDraconatos(Horde, orcs);
+
+                cout << "MONSTRO CAIDO !" << endl << endl;
+            }
+            else
+            {
+                cout << "indice invalido !" << endl;
+            }
+        }
+
         void ListarHumanos(vector<Player>& humanos)
         {
         if (humanos.size() > 0 )
@@ -491,7 +1009,8 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             }
         }
         else
-            cout << "Estamos sem caçadores" << endl;
+            system ("clear");
+            cout << "Estamos sem caçadores" << endl << endl;
 
         }
 
@@ -524,10 +1043,111 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             }
             }
             else
-                cout << "A orda não possui guerreiros" << endl;
+                system ("clear");
+                cout << "A orda não possui guerreiros" << endl << endl;
 
 
         }
+
+        void ListarElfos(vector<Player>& elfos)
+        {
+            if (elfos.size() > 0 )
+
+            {
+
+                for(size_t i = 0; i < elfos.size(); i++)
+                {
+                    cout << endl << "Nome: " << elfos[i].lutador.Getname() << endl;
+
+                    cout << "/-------------------Status -------------------/" << endl;
+
+                    cout << "Vida: " << elfos[i].lutador.Getlife() << ", ";
+                    cout << "Ataque: " << elfos[i].lutador.Getattack() << ", ";
+                    cout << "Defesa: " << elfos[i].lutador.Getdefense() << endl;
+
+                    cout << "/-------------------Equipamento --------------/" << endl;
+
+                    cout << "Arma: " << elfos[i].arma.GetnomeArma() << ", ";
+                    cout << "Dano: " << elfos[i].arma.GetdanoArma() << ", ";
+                    cout << "Velocidade: " << elfos[i].arma.GetvelocidadeArma() << ", ";
+                    cout << "Critico: " << elfos[i].arma.GetcriticoArma() << endl;
+
+                    cout << "Escudo: " << elfos[i].escudo.GetEscnome() << ", ";
+                    cout << "Defesa: " << elfos[i].escudo.GetEscdefesa() << ", ";
+                    cout << "Block: " << elfos[i].escudo.GetEscblock() << endl;
+                }
+            }
+            else
+                system ("clear");
+                cout << "A orda não possui guerreiros" << endl << endl;
+
+
+        }
+
+        void ListarDemonios(vector<Player>& demonios)
+        {
+            if (demonios.size() > 0 )
+            {
+                for(size_t i = 0; i < demonios.size(); i++)
+                {
+                    cout << endl << "Nome: " << demonios[i].lutador.Getname() << endl;
+
+                    cout << "/-------------------Status -------------------/" << endl;
+
+                    cout << "Vida: " << demonios[i].lutador.Getlife() << ", ";
+                    cout << "Ataque: " << demonios[i].lutador.Getattack() << ", ";
+                    cout << "Defesa: " << demonios[i].lutador.Getdefense() << endl;
+
+                    cout << "/-------------------Equipamento --------------/" << endl;
+
+                    cout << "Arma: " << demonios[i].arma.GetnomeArma() << ", ";
+                    cout << "Dano: " << demonios[i].arma.GetdanoArma() << ", ";
+                    cout << "Velocidade: " << demonios[i].arma.GetvelocidadeArma() << ", ";
+                    cout << "Critico: " << demonios[i].arma.GetcriticoArma() << endl;
+
+                    cout << "Escudo: " << demonios[i].escudo.GetEscnome() << ", ";
+                    cout << "Defesa: " << demonios[i].escudo.GetEscdefesa() << ", ";
+                    cout << "Block: " << demonios[i].escudo.GetEscblock() << endl;
+                }
+            }
+            else
+                system ("clear");
+                cout << "A orda não possui guerreiros" << endl << endl;
+        }
+
+        void ListarDraconatos(vector<Player>& draconatos)
+        {
+            if (draconatos.size() > 0 )
+
+            {
+
+                for(size_t i = 0; i < draconatos.size(); i++)
+                {
+                    cout << endl << "Nome: " << draconatos[i].lutador.Getname() << endl;
+
+                    cout << "/-------------------Status -------------------/" << endl;
+
+                    cout << "Vida: " << draconatos[i].lutador.Getlife() << ", ";
+                    cout << "Ataque: " << draconatos[i].lutador.Getattack() << ", ";
+                    cout << "Defesa: " << draconatos[i].lutador.Getdefense() << endl;
+
+                    cout << "/-------------------Equipamento --------------/" << endl;
+
+                    cout << "Arma: " << draconatos[i].arma.GetnomeArma() << ", ";
+                    cout << "Dano: " << draconatos[i].arma.GetdanoArma() << ", ";
+                    cout << "Velocidade: " << draconatos[i].arma.GetvelocidadeArma() << ", ";
+                    cout << "Critico: " << draconatos[i].arma.GetcriticoArma() << endl;
+
+                    cout << "Escudo: " << draconatos[i].escudo.GetEscnome() << ", ";
+                    cout << "Defesa: " << draconatos[i].escudo.GetEscdefesa() << ", ";
+                    cout << "Block: " << draconatos[i].escudo.GetEscblock() << endl;
+                }
+            }
+            else
+                system ("clear");
+                cout << "A orda não possui guerreiros" << endl << endl;
+        }
+
         void GerarHumanos(vector<string>& Mankind, vector<Player>& humanos)
         {
             for (int i = 0; i < names.size(); i++)
@@ -592,5 +1212,104 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
                 );
             }
         }
+
+        void GerarElfos(vector<string>& Folk, vector<Player>& elfos)
+        {
+            for (int i = 0; i < nomeselfos.size(); i++)
+            {
+                string nome = nomeselfos[i];
+
+                float life = rand() %1;
+                float attack = rand() %1;
+                float defense = rand() %1;
+                float esquiva = rand() %1;
+
+                string nomeArma = "Espada";
+                float danoArma = rand() %1;
+                float criticoArma = rand() %1;
+                float velocidade = rand() %1;
+
+                string Escnome = "Escudo";
+                float Escblock = rand() %1;
+                float Escdefesa = rand() %1;
+                float Escvida = rand() %1;
+
+                Folk.push_back(nome);
+
+                elfos.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    Escnome, Escblock, Escdefesa, Escvida
+                );
+            }
+        }
+
+
+        void GerarDemonios(vector<string>& Cult, vector<Player>& demonios)
+        {
+            for (int i = 0; i < nomesdemonios.size(); i++)
+            {
+                string nome = nomesdemonios[i];
+
+                float life = rand() %1;
+                float attack = rand() %1;
+                float defense = rand() %1;
+                float esquiva = rand() %1;
+
+                string nomeArma = "Espada";
+                float danoArma = rand() %1;
+                float criticoArma = rand() %1;
+                float velocidade = rand() %1;
+
+                string Escnome = "Escudo";
+                float Escblock = rand() %1;
+                float Escdefesa = rand() %1;
+                float Escvida = rand() %1;
+
+                Cult.push_back(nome);
+
+                demonios.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    Escnome, Escblock, Escdefesa, Escvida
+                );
+            }
+        }
+
+        void GerarDraconatos(vector<string>& Folk, vector<Player>& draconatos)
+        {
+            for (int i = 0; i < nomesdraconatos.size(); i++)
+            {
+                string nome = nomesdraconatos[i];
+
+                float life = rand() %1;
+                float attack = rand() %1;
+                float defense = rand() %1;
+                float esquiva = rand() %1;
+
+                string nomeArma = "Espada";
+                float danoArma = rand() %1;
+                float criticoArma = rand() %1;
+                float velocidade = rand() %1;
+
+                string Escnome = "Escudo";
+                float Escblock = rand() %1;
+                float Escdefesa = rand() %1;
+                float Escvida = rand() %1;
+
+                Clan.push_back(nome);
+
+                draconatos.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    Escnome, Escblock, Escdefesa, Escvida
+                );
+            }
+        }
+
+
 
 
