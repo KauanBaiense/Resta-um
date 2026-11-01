@@ -907,7 +907,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < elfos.size(); i++)
             {
-                fadas << i << " "<< elfos[i].lutador.Getname() << " " << elfos[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << elfos[i].lutador.Getdefense() << " " << elfos[i].lutador.Getesquiva() << " " << elfos[i].arma.GetnomeArma() << " " << elfos[i].arma.GetdanoArma() << " " << elfos[i].arma.GetcriticoArma() << " " << elfos[i].arma.GetvelocidadeArma() << " " << elfos[i].escudo.GetEscnome() << " " << elfos[i].escudo.GetEscblock() << " " << elfos[i].escudo.GetEscdefesa() << " " << elfos[i].escudo.GetEscvida() << " " << elfos[i].IsHero() << endl;
+                fadas << i << " "<< elfos[i].lutador.Getname() << " " << elfos[i].lutador.Getlife() << " " << elfos[i].lutador.Getattack() << " " << elfos[i].lutador.Getdefense() << " " << elfos[i].lutador.Getesquiva() << " " << elfos[i].arma.GetnomeArma() << " " << elfos[i].arma.GetdanoArma() << " " << elfos[i].arma.GetcriticoArma() << " " << elfos[i].arma.GetvelocidadeArma() << " " << elfos[i].escudo.GetEscnome() << " " << elfos[i].escudo.GetEscblock() << " " << elfos[i].escudo.GetEscdefesa() << " " << elfos[i].escudo.GetEscvida() << " " << elfos[i].IsHero() << endl;
 
             }
 
