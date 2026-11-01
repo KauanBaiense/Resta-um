@@ -1,7 +1,8 @@
 #include "player.hpp"
 #include <fstream>
 #include "nomes.hpp"
-
+#include <cstdlib>
+#include <ctime>
 
 
 void menu();
@@ -104,26 +105,55 @@ void Luta(vector<Player>& grupo1, vector<Player>& grupo2)
 
         auto jogador1Ataca = [&]()
         {
-            cout << "Lutador " << jogador1.lutador.Getname()
-            << " atacando " << jogador2.lutador.Getname() << "....";
+            cout << "Lutador " << jogador1.lutador.Getname() << " atacando...\n";
 
-            bool status = jogador1.Attack(grupo2, j);
-
-            if (status)
+            //critical-hit starts here
+            int chanceCritico = rand() % 100;
+            
+            if (jogador1.IsHero() && chanceCritico > 20 && grupo2.size() > 1) 
             {
-                cout << "ataque bem-sucedido" << endl;
-
-                if (jogador2.lutador.Getlife() <= 0)
-                {
-                    cout << "Lutador abatido: "
-                    << jogador2.lutador.Getname() << endl;
-
-                    grupo2.erase(grupo2.begin() + j);
-                    return;
+                cout << "I am the storm that is approaching!!!(CRITOOOUU EM GRUPO)" << endl;
+                vector<size_t> indicesAfetados;
+                
+                size_t numAlvos = min(grupo2.size(), (size_t)(rand() % 2 + 2)); 
+                
+                for (size_t i = 0; i < numAlvos; i++) {
+                    indicesAfetados.push_back(rand() % grupo2.size());
                 }
 
-                cout << "vida restante: "
-                << jogador2.lutador.Getlife() << endl;
+                for (size_t danoGrupo : indicesAfetados) {
+                    cout << "Acertando alvo secundário " << grupo2[danoGrupo].lutador.Getname() << "... ";
+                    jogador1.Attack(grupo2, danoGrupo);
+                }
+
+                for (int i = grupo2.size() - 1; i >= 0; i--) {
+                    if (grupo2[i].lutador.Getlife() <= 0) {
+                        cout << "Lutador abatido no ataque em área: " << grupo2[i].lutador.Getname() << endl;
+                        grupo2.erase(grupo2.begin() + i);
+                    }
+                }
+                
+                if(grupo2.empty()) return; 
+            }
+            else 
+            {
+                
+                cout << "atacando " << jogador2.lutador.Getname() << "....";
+                bool status = jogador1.Attack(grupo2, j);
+
+                if (status)
+                {
+                    cout << "ataque bem-sucedido" << endl;
+
+                    if (grupo2[j].lutador.Getlife() <= 0)
+                    {
+                        cout << "Lutador abatido: " << grupo2[j].lutador.Getname() << endl;
+                        grupo2.erase(grupo2.begin() + j);
+                        return;
+                    }
+
+                    cout << "vida restante: " << grupo2[j].lutador.Getlife() << endl;
+                }
             }
         };
 
@@ -455,22 +485,27 @@ void EscolherLuta()
             getline(cin, nome);
 
 
-            life = rand()%1;
-            attack = rand()%1;
-            defense = rand()%1;
-            esquiva = rand()%1;
+            life = rand()%51 + 50;
+            attack = rand()%11 + 10;
+            defense = rand()%16;
+            esquiva = rand()%29;
 
             cout <<  "Qual sera o nome da arma ? ";
             getline(cin, nomeArma);
-            danoArma = rand()%1;
-            criticoArma = rand()%1;
-            velocidade = rand()%1;
+            danoArma = rand()%25;
+            criticoArma = rand()%25;
+            velocidade = rand()%25;
 
             cout << "Qual sera o nome do escudo ?";
             getline(cin, Escnome);
-            Escblock = rand()%1;
-            Escdefesa = rand()%1;
-            Escvida = rand()%1;
+            Escblock = rand()%25;
+            Escdefesa = rand()%25;
+            Escvida = rand()%25;
+
+            bool isHero;
+            cout << "Transformar em heroi? (1 - Sim, 0 - Nao): ";
+            cin >> isHero;
+            cin.ignore();
 
             Mankind.push_back(nome);
 
@@ -479,7 +514,7 @@ void EscolherLuta()
                 nome, life, attack, defense,
                 nomeArma, danoArma, criticoArma,
                 esquiva, velocidade,
-                Escnome, Escblock, Escdefesa, Escvida);
+                Escnome, Escblock, Escdefesa, Escvida, isHero);
 
              SalvarHumanos(Mankind, humanos);
             system("clear");
@@ -499,22 +534,22 @@ void EscolherLuta()
             getline(cin, nome);
 
 
-            life = rand()%1;
-            attack = rand()%1;
-            defense = rand()%1;
-            esquiva = rand()%1;
+            life = rand()%51 + 50;
+            attack = rand()%11 + 10;
+            defense = rand()%16;
+            esquiva = rand()%29;
 
             cout <<  "De nome ao aço: ";
             getline(cin, nomeArma);
-            danoArma = rand()%1;
-            criticoArma = rand()%1;
-            velocidade = rand()%1;
+            danoArma = rand()%25;
+            criticoArma = rand()%25;
+            velocidade = rand()%25;
 
             cout << "De nome a tabua para-golpe:";
             getline(cin, Escnome);
-            Escblock = rand()%1;
-            Escdefesa = rand()%1;
-            Escvida = rand()%1;
+            Escblock = rand()%25;
+            Escdefesa = rand()%25;
+            Escvida = rand()%25;
 
             Horde.push_back(nome);
 
@@ -541,22 +576,22 @@ void EscolherLuta()
             getline(cin, nome);
 
 
-            life = rand()%1;
-            attack = rand()%1;
-            defense = rand()%1;
-            esquiva = rand()%1;
+            life = rand()%51 + 50;
+            attack = rand()%11 + 10;
+            defense = rand()%16;
+            esquiva = rand()%29;
 
             cout <<  "Nomeando armamento: ";
             getline(cin, nomeArma);
-            danoArma = rand()%1;
-            criticoArma = rand()%1;
-            velocidade = rand()%1;
+            danoArma = rand()%25;
+            criticoArma = rand()%25;
+            velocidade = rand()%25;
 
             cout << "Nomeando Proteção:";
             getline(cin, Escnome);
-            Escblock = rand()%1;
-            Escdefesa = rand()%1;
-            Escvida = rand()%1;
+            Escblock = rand()%25;
+            Escdefesa = rand()%25;
+            Escvida = rand()%25;
 
             Folk.push_back(nome);
 
@@ -583,22 +618,22 @@ void EscolherLuta()
             getline(cin, nome);
 
 
-            life = rand()%1;
-            attack = rand()%1;
-            defense = rand()%1;
-            esquiva = rand()%1;
+            life = rand()%51 + 50;
+            attack = rand()%11 + 10;
+            defense = rand()%16;
+            esquiva = rand()%29;
 
             cout <<  "De nome a arma do capeta: ";
             getline(cin, nomeArma);
-            danoArma = rand()%1;
-            criticoArma = rand()%1;
-            velocidade = rand()%1;
+            danoArma = rand()%25;
+            criticoArma = rand()%25;
+            velocidade = rand()%25;
 
             cout << "De nome ao escudo do diabo:";
             getline(cin, Escnome);
-            Escblock = rand()%1;
-            Escdefesa = rand()%1;
-            Escvida = rand()%1;
+            Escblock = rand()%25;
+            Escdefesa = rand()%25;
+            Escvida = rand()%25;
 
             Cult.push_back(nome);
 
@@ -625,22 +660,22 @@ void EscolherLuta()
             getline(cin, nome);
 
 
-            life = rand()%1;
-            attack = rand()%1;
-            defense = rand()%1;
-            esquiva = rand()%1;
+            life = rand()%51 + 50;
+            attack = rand()%11 + 10;
+            defense = rand()%16;
+            esquiva = rand()%29;
 
             cout <<  "De nome a garra: ";
             getline(cin, nomeArma);
-            danoArma = rand()%1;
-            criticoArma = rand()%1;
-            velocidade = rand()%1;
+            danoArma = rand()%25;
+            criticoArma = rand()%25;
+            velocidade = rand()%25;
 
             cout << "De nome as escamas:";
             getline(cin, Escnome);
-            Escblock = rand()%1;
-            Escdefesa = rand()%1;
-            Escvida = rand()%1;
+            Escblock = rand()%25;
+            Escdefesa = rand()%25;
+            Escvida = rand()%25;
 
             Clan.push_back(nome);
 
@@ -669,8 +704,9 @@ void EscolherLuta()
             float life, attack, defense, esquiva;
             float danoArma, criticoArma, velocidade;
             float Escblock, Escdefesa, Escvida;
+            bool isHero;
 
-            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida >> isHero)
             {
                 Mankind.push_back(nome);
 
@@ -678,7 +714,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    nomeEscudo, Escblock, Escdefesa, Escvida);
+                    nomeEscudo, Escblock, Escdefesa, Escvida, isHero);
             }
 
             arquivo.close();
@@ -793,7 +829,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < humanos.size(); i++)
             {
-                alala << i << " "<< humanos[i].lutador.Getname() << " " <<humanos[i].lutador.Getlife() << " " <<humanos[i].lutador.Getattack() << " " <<humanos[i].lutador.Getdefense() << " " << humanos[i].lutador.Getesquiva() << " " << humanos[i].arma.GetnomeArma() << " " << humanos[i].arma.GetdanoArma() << " " << humanos[i].arma.GetcriticoArma() << " " << humanos[i].arma.GetvelocidadeArma() << " " << humanos[i].escudo.GetEscnome() << " " << humanos[i].escudo.GetEscblock() << " " << humanos[i].escudo.GetEscdefesa() << " " << humanos[i].escudo.GetEscvida() << endl;
+                alala << i << " "<< humanos[i].lutador.Getname() << " " <<humanos[i].lutador.Getlife() << " " <<humanos[i].lutador.Getattack() << " " <<humanos[i].lutador.Getdefense() << " " << humanos[i].lutador.Getesquiva() << " " << humanos[i].arma.GetnomeArma() << " " << humanos[i].arma.GetdanoArma() << " " << humanos[i].arma.GetcriticoArma() << " " << humanos[i].arma.GetvelocidadeArma() << " " << humanos[i].escudo.GetEscnome() << " " << humanos[i].escudo.GetEscblock() << " " << humanos[i].escudo.GetEscdefesa() << " " << humanos[i].escudo.GetEscvida() << " " << humanos[i].IsHero() << endl;
             }
 
             alala.close();
@@ -1004,7 +1040,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < humanos.size(); i++)
             {
-                cout << endl << "Nome: " << humanos[i].lutador.Getname() << endl;
+                cout << endl << "Nome: " << humanos[i].lutador.Getname() << (humanos[i].IsHero() ? " (H)" : "") << endl;
 
                 cout << "/-------------------Status -------------------/" << endl;
 
@@ -1025,10 +1061,12 @@ void EscolherLuta()
             }
         }
         else
+        {
             system ("clear");
             cout << "Estamos sem caçadores" << endl << endl;
 
 
+        }
         }
 
         void ListarOrcs(vector<Player>& orcs)
@@ -1183,20 +1221,20 @@ void EscolherLuta()
             {
                 string nome = names[i];
 
-                float life = rand() %1;
-                float attack = rand() %1;
-                float defense = rand() %1;
-                float esquiva = rand() %1;
+                float life = rand() %51 + 50;
+                float attack = rand() %11 + 10;
+                float defense = rand() %16;
+                float esquiva = rand() %29;
 
                 string nomeArma = "Espada";
-                float danoArma = rand() %1;
-                float criticoArma = rand() %1;
-                float velocidade = rand() %1;
+                float danoArma = rand() %25;
+                float criticoArma = rand() %25;
+                float velocidade = rand() %25;
 
                 string Escnome = "Escudo";
-                float Escblock = rand() %1;
-                float Escdefesa = rand() %1;
-                float Escvida = rand() %1;
+                float Escblock = rand() %25;
+                float Escdefesa = rand() %25;
+                float Escvida = rand() %25;
 
                 Mankind.push_back(nome);
 
@@ -1204,7 +1242,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida
+                    Escnome, Escblock, Escdefesa, Escvida, rand() % 2
                 );
             }
         }
@@ -1216,20 +1254,20 @@ void EscolherLuta()
             {
                 string nome = nomesorc[i];
 
-                float life = rand() %1;
-                float attack = rand() %1;
-                float defense = rand() %1;
-                float esquiva = rand() %1;
+                float life = rand() %51 + 50;
+                float attack = rand() %11 + 10;
+                float defense = rand() %16;
+                float esquiva = rand() %29;
 
                 string nomeArma = "Espada";
-                float danoArma = rand() %1;
-                float criticoArma = rand() %1;
-                float velocidade = rand() %1;
+                float danoArma = rand() %25;
+                float criticoArma = rand() %25;
+                float velocidade = rand() %25;
 
                 string Escnome = "Escudo";
-                float Escblock = rand() %1;
-                float Escdefesa = rand() %1;
-                float Escvida = rand() %1;
+                float Escblock = rand() %25;
+                float Escdefesa = rand() %25;
+                float Escvida = rand() %25;
 
                 Horde.push_back(nome);
 
@@ -1248,20 +1286,20 @@ void EscolherLuta()
             {
                 string nome = nomeselfos[i];
 
-                float life = rand() %1;
-                float attack = rand() %1;
-                float defense = rand() %1;
-                float esquiva = rand() %1;
+                float life = rand() %51 + 50;
+                float attack = rand() %11 + 10;
+                float defense = rand() %16;
+                float esquiva = rand() %29;
 
                 string nomeArma = "Espada";
-                float danoArma = rand() %1;
-                float criticoArma = rand() %1;
-                float velocidade = rand() %1;
+                float danoArma = rand() %25;
+                float criticoArma = rand() %25;
+                float velocidade = rand() %25;
 
                 string Escnome = "Escudo";
-                float Escblock = rand() %1;
-                float Escdefesa = rand() %1;
-                float Escvida = rand() %1;
+                float Escblock = rand() %25;
+                float Escdefesa = rand() %25;
+                float Escvida = rand() %25;
 
                 Folk.push_back(nome);
 
@@ -1281,20 +1319,20 @@ void EscolherLuta()
             {
                 string nome = nomesdemonios[i];
 
-                float life = rand() %1;
-                float attack = rand() %1;
-                float defense = rand() %1;
-                float esquiva = rand() %1;
+                float life = rand() %51 + 50;
+                float attack = rand() %11 + 10;
+                float defense = rand() %16;
+                float esquiva = rand() %29;
 
                 string nomeArma = "Espada";
-                float danoArma = rand() %1;
-                float criticoArma = rand() %1;
-                float velocidade = rand() %1;
+                float danoArma = rand() %25;
+                float criticoArma = rand() %25;
+                float velocidade = rand() %25;
 
                 string Escnome = "Escudo";
-                float Escblock = rand() %1;
-                float Escdefesa = rand() %1;
-                float Escvida = rand() %1;
+                float Escblock = rand() %25;
+                float Escdefesa = rand() %25;
+                float Escvida = rand() %25;
 
                 Cult.push_back(nome);
 
@@ -1313,20 +1351,20 @@ void EscolherLuta()
             {
                 string nome = nomesdraconatos[i];
 
-                float life = rand() %1;
-                float attack = rand() %1;
-                float defense = rand() %1;
-                float esquiva = rand() %1;
-
+                float life = rand() %51 + 50;
+                float attack = rand() %11 + 10;
+                float defense = rand() %16;
+                float esquiva = rand() %29;
+    
                 string nomeArma = "Espada";
-                float danoArma = rand() %1;
-                float criticoArma = rand() %1;
-                float velocidade = rand() %1;
+                float danoArma = rand() %25;
+                float criticoArma = rand() %25;
+                float velocidade = rand() %25;
 
                 string Escnome = "Escudo";
-                float Escblock = rand() %1;
-                float Escdefesa = rand() %1;
-                float Escvida = rand() %1;
+                float Escblock = rand() %25;
+                float Escdefesa = rand() %25;
+                float Escvida = rand() %25;
 
                 Clan.push_back(nome);
 
@@ -1338,7 +1376,6 @@ void EscolherLuta()
                 );
             }
         }
-
 
 
 

@@ -47,15 +47,20 @@ public:
         return m_life;
     }
 
-
     void SetLife(float novoValor)
             {
 
                  m_life = novoValor;
              }
-
+    void SetAttack(float novoValor)
+            {
+                m_attack = novoValor;
+            }
+    void SetDefense(float novoValor)
+            {
+                m_defense = novoValor;
+            }
 };
-
 
  class Armas
  {
@@ -129,23 +134,25 @@ public:
 
 };
 
-
  class Player
  {
 
  private:
-
+    bool m_isHero;
  public:
      Armas arma;
      Lutadores lutador;
      Escudos escudo;
 
-     Player(string nome, float life, float attack, float defense,string nomeArma, float danoArma, float criticoArma,float esquiva, float velocidadeArma, string Escnome , float Escblock, float Escdefesa, float Escvida)
+     Player(string nome, float life, float attack, float defense,string nomeArma, float danoArma, float criticoArma,float esquiva, float velocidadeArma, string Escnome , float Escblock, float Escdefesa, float Escvida, bool isHero = false)
      : arma(nomeArma, danoArma, criticoArma, velocidadeArma),
        lutador(nome, life, attack, defense, esquiva),
-       escudo(Escnome, Escblock, Escdefesa, Escvida)
+       escudo(Escnome, Escblock, Escdefesa, Escvida),
+       m_isHero(isHero)
      {}
-
+     bool IsHero() {
+        return m_isHero;
+     }
      bool Attack(vector<Player>& alvos, int indice)
      {
          if (indice < 0 || indice >= alvos.size())
@@ -175,6 +182,5 @@ public:
          return true;
      }
  };
-
 
 
