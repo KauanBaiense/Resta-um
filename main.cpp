@@ -7,6 +7,8 @@
 void menu();
 void submenu();
 
+void GerarOrcs(vector<string>& Horde, vector<Player>& orcs);
+void GerarHumanos(vector<string>& Mankind, vector<Player>& humanos);
 
 void CarregarHumanos(vector<string>& Mankind, vector<Player>& humanos);
 void CarregarOrcs(vector<string>& Horde, vector<Player>& orcs);
@@ -136,7 +138,7 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
         {
             int opt;
             submenu();
-            while (opt != 8)
+            while (opt != 9)
             {
 
                 cin >> opt;
@@ -199,20 +201,34 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
                         break;
                     }
 
-
                     case 7:
+                    {
                         system("clear");
                         Luta(humanos, orcs);
                         cout << endl;
                         submenu();
                         break;
+                    }
 
                     case 8:
+                    {
+                     system("clear");
+                     cout << "Fantasmas de Valhala ";
+                     GerarOrcs(Horde, orcs);
+                     GerarHumanos(Mankind, humanos);
+                     cout << endl;
+                     submenu();
+                     break;
+
+                    }
+                    case 9:
+                    {
                         cout << "saindo... ";
                         break;
-                    default:
-                    break;
+                    }
 
+                    default:
+                        break;
                 }
             }
 
@@ -228,7 +244,8 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
             cout << "5.Obliterar um guerreiro humano" << endl;
             cout << "6.Caçar um monstro"<<endl;
             cout << "7.Iniciar o Ragnarok" << endl;
-
+            cout << "8.Day of the Dead" << endl;
+            cout << "9.Sair" << endl;
         }
 
         void AdicionarHumano(vector<string>& Mankind, vector<Player>& humanos)
@@ -510,6 +527,70 @@ void Luta(vector<Player>& humanos, vector<Player>& orcs)
                 cout << "A orda não possui guerreiros" << endl;
 
 
+        }
+        void GerarHumanos(vector<string>& Mankind, vector<Player>& humanos)
+        {
+            for (int i = 0; i < names.size(); i++)
+            {
+                string nome = names[i];
+
+                float life = rand() %1;
+                float attack = rand() %1;
+                float defense = rand() %1;
+                float esquiva = rand() %1;
+
+                string nomeArma = "Espada";
+                float danoArma = rand() %1;
+                float criticoArma = rand() %1;
+                float velocidade = rand() %1;
+
+                string Escnome = "Escudo";
+                float Escblock = rand() %1;
+                float Escdefesa = rand() %1;
+                float Escvida = rand() %1;
+
+                Mankind.push_back(nome);
+
+                humanos.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    Escnome, Escblock, Escdefesa, Escvida
+                );
+            }
+        }
+
+
+        void GerarOrcs(vector<string>& Horde, vector<Player>& orcs)
+        {
+            for (int i = 0; i < nomesorc.size(); i++)
+            {
+                string nome = nomesorc[i];
+
+                float life = rand() %1;
+                float attack = rand() %1;
+                float defense = rand() %1;
+                float esquiva = rand() %1;
+
+                string nomeArma = "Espada";
+                float danoArma = rand() %1;
+                float criticoArma = rand() %1;
+                float velocidade = rand() %1;
+
+                string Escnome = "Escudo";
+                float Escblock = rand() %1;
+                float Escdefesa = rand() %1;
+                float Escvida = rand() %1;
+
+                Horde.push_back(nome);
+
+                orcs.emplace_back(
+                    nome, life, attack, defense,
+                    nomeArma, danoArma, criticoArma,
+                    esquiva, velocidade,
+                    Escnome, Escblock, Escdefesa, Escvida
+                );
+            }
         }
 
 
