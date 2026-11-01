@@ -24,8 +24,6 @@ void CarregarDemonios(vector<string>& Cult, vector<Player>&demonios);
 void CarregarDraconatos(vector<string>&Clan, vector<Player>&draconatos);
 
 
-
-
 void SalvarHumanos(vector<string>& Mankind, vector<Player>& humanos);
 void SalvarOrcs(vector<string>& Horde, vector<Player>& orcs);
 void SalvarElfos(vector<string>& Folk, vector<Player>&elfos);
@@ -162,23 +160,54 @@ void Luta(vector<Player>& grupo1, vector<Player>& grupo2)
             cout << "Lutador " << jogador2.lutador.Getname()
             << " atacando " << jogador1.lutador.Getname() << "....";
 
-            bool status = jogador2.Attack(grupo1, i);
+            int chanceCritico = rand() %100;
 
-            if (status)
+            if (jogador2.IsHero() && chanceCritico > 20 && grupo1.size() > 1)
             {
-                cout << "ataque bem-sucedido" << endl;
+                cout << "I am the storm that is approaching!!!(CRITOOOUU EM GRUPO)" << endl;
+                vector<size_t> indicesAfetados;
 
-                if (jogador1.lutador.Getlife() <= 0)
-                {
-                    cout << "Lutador abatido: "
-                    << jogador1.lutador.Getname() << endl;
+                size_t numAlvos = min(grupo1.size(), (size_t)(rand()%2 + 2));
 
-                    grupo1.erase(grupo1.begin() + i);
-                    return;
+                for(size_t i=0; i < numAlvos; i++){
+                    indicesAfetados.push_back(rand() % grupo1.size());
+
                 }
+                for(size_t danoGrupo : indicesAfetados){
+                    cout << "Acertando alvo secundário " << grupo1[danoGrupo].lutador.Getname() << "... ";
+                    jogador2.Attack(grupo1, danoGrupo);
+                }
+                for(int i = grupo1.size() - 1; i >= 0; i--){
+                    if (grupo1[i].lutador.Getlife() <= 0) {
+                        cout << "Lutador abatido no ataque em área: " << grupo1[i].lutador.Getname() << endl;
+                        grupo1.erase(grupo1.begin() + i);
+                    }
+                }
+                if(grupo1.empty()) return;
 
-                cout << "vida restante: "
-                << jogador1.lutador.Getlife() << endl;
+            }
+            else 
+            {
+                cout << "atacando " << jogador1.lutador.Getname() << "....";
+                bool status = jogador2.Attack(grupo1, i);
+
+            
+                if (status)
+                {
+                    cout << "ataque bem-sucedido" << endl;
+
+                    if (jogador1.lutador.Getlife() <= 0)
+                    {
+                        cout << "Lutador abatido: "
+                        << jogador1.lutador.Getname() << endl;
+
+                        grupo1.erase(grupo1.begin() + i);
+                        return;
+                    }
+
+                    cout << "vida restante: "
+                    << jogador1.lutador.Getlife() << endl;
+                }
             }
         };
 
@@ -551,6 +580,11 @@ void EscolherLuta()
             Escdefesa = rand()%25;
             Escvida = rand()%25;
 
+            bool isHero;
+            cout << "Transformar em heroi? (1 - Sim, 0 - Nao): ";
+            cin >> isHero;
+            cin.ignore();
+
             Horde.push_back(nome);
 
             orcs.emplace_back
@@ -558,7 +592,7 @@ void EscolherLuta()
                 nome, life, attack, defense,
              nomeArma, danoArma, criticoArma,
              esquiva, velocidade,
-             Escnome, Escblock, Escdefesa, Escvida);
+             Escnome, Escblock, Escdefesa, Escvida, isHero);
 
 
             SalvarOrcs(Horde, orcs);
@@ -593,6 +627,11 @@ void EscolherLuta()
             Escdefesa = rand()%25;
             Escvida = rand()%25;
 
+            bool isHero;
+            cout << "Transformar em heroi? (1 - Sim, 0 - Nao): ";
+            cin >> isHero;
+            cin.ignore();
+
             Folk.push_back(nome);
 
             elfos.emplace_back
@@ -600,7 +639,7 @@ void EscolherLuta()
                 nome, life, attack, defense,
              nomeArma, danoArma, criticoArma,
              esquiva, velocidade,
-             Escnome, Escblock, Escdefesa, Escvida);
+             Escnome, Escblock, Escdefesa, Escvida, isHero);
 
 
             SalvarElfos(Folk, elfos);
@@ -635,6 +674,11 @@ void EscolherLuta()
             Escdefesa = rand()%25;
             Escvida = rand()%25;
 
+            bool isHero;
+            cout << "Transformar em heroi? (1 - Sim, 0 - Nao): ";
+            cin >> isHero;
+            cin.ignore();
+
             Cult.push_back(nome);
 
             demonios.emplace_back
@@ -642,7 +686,7 @@ void EscolherLuta()
                 nome, life, attack, defense,
              nomeArma, danoArma, criticoArma,
              esquiva, velocidade,
-             Escnome, Escblock, Escdefesa, Escvida);
+             Escnome, Escblock, Escdefesa, Escvida, isHero);
 
 
             SalvarDemonios(Cult, demonios);
@@ -677,6 +721,11 @@ void EscolherLuta()
             Escdefesa = rand()%25;
             Escvida = rand()%25;
 
+            bool isHero;
+            cout << "Transformar em heroi? (1 - Sim, 0 - Nao): ";
+            cin >> isHero;
+            cin.ignore();
+
             Clan.push_back(nome);
 
             draconatos.emplace_back
@@ -684,7 +733,7 @@ void EscolherLuta()
                 nome, life, attack, defense,
              nomeArma, danoArma, criticoArma,
              esquiva, velocidade,
-             Escnome, Escblock, Escdefesa, Escvida);
+             Escnome, Escblock, Escdefesa, Escvida, isHero);
 
 
             SalvarDraconatos(Clan, draconatos);
@@ -730,8 +779,9 @@ void EscolherLuta()
             float life, attack, defense, esquiva;
             float danoArma, criticoArma, velocidade;
             float Escblock, Escdefesa, Escvida;
+            bool isHero;
 
-            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida >> isHero)
             {
                 Horde.push_back(nome);
 
@@ -739,7 +789,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    nomeEscudo, Escblock, Escdefesa, Escvida);
+                    nomeEscudo, Escblock, Escdefesa, Escvida, isHero);
             }
 
             arquivo.close();
@@ -755,8 +805,9 @@ void EscolherLuta()
             float life, attack, defense, esquiva;
             float danoArma, criticoArma, velocidade;
             float Escblock, Escdefesa, Escvida;
+            bool isHero;
 
-            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida >> isHero)
             {
                 Folk.push_back(nome);
 
@@ -764,7 +815,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    nomeEscudo, Escblock, Escdefesa, Escvida);
+                    nomeEscudo, Escblock, Escdefesa, Escvida, isHero);
             }
 
             arquivo.close();
@@ -780,8 +831,9 @@ void EscolherLuta()
             float life, attack, defense, esquiva;
             float danoArma, criticoArma, velocidade;
             float Escblock, Escdefesa, Escvida;
+            bool isHero;
 
-            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida >> isHero)
             {
                 Cult.push_back(nome);
 
@@ -789,7 +841,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    nomeEscudo, Escblock, Escdefesa, Escvida);
+                    nomeEscudo, Escblock, Escdefesa, Escvida, isHero);
             }
 
             arquivo.close();
@@ -805,8 +857,9 @@ void EscolherLuta()
             float life, attack, defense, esquiva;
             float danoArma, criticoArma, velocidade;
             float Escblock, Escdefesa, Escvida;
+            bool isHero;
 
-            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida)
+            while(arquivo >> indice >> nome >> life >> attack >> defense >> esquiva >> nomeArma >> danoArma >> criticoArma >> velocidade >> nomeEscudo >> Escblock >> Escdefesa >> Escvida >> isHero)
             {
                 Clan.push_back(nome);
 
@@ -814,7 +867,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    nomeEscudo, Escblock, Escdefesa, Escvida);
+                    nomeEscudo, Escblock, Escdefesa, Escvida, isHero);
             }
 
             arquivo.close();
@@ -841,7 +894,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < orcs.size(); i++)
             {
-            oinc << i << " "<< orcs[i].lutador.Getname() << " " << orcs[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << orcs[i].lutador.Getdefense() << " " << orcs[i].lutador.Getesquiva() << " " << orcs[i].arma.GetnomeArma() << " " << orcs[i].arma.GetdanoArma() << " " << orcs[i].arma.GetcriticoArma() << " " << orcs[i].arma.GetvelocidadeArma() << " " << orcs[i].escudo.GetEscnome() << " " << orcs[i].escudo.GetEscblock() << " " << orcs[i].escudo.GetEscdefesa() << " " << orcs[i].escudo.GetEscvida() << endl;
+            oinc << i << " "<< orcs[i].lutador.Getname() << " " << orcs[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << orcs[i].lutador.Getdefense() << " " << orcs[i].lutador.Getesquiva() << " " << orcs[i].arma.GetnomeArma() << " " << orcs[i].arma.GetdanoArma() << " " << orcs[i].arma.GetcriticoArma() << " " << orcs[i].arma.GetvelocidadeArma() << " " << orcs[i].escudo.GetEscnome() << " " << orcs[i].escudo.GetEscblock() << " " << orcs[i].escudo.GetEscdefesa() << " " << orcs[i].escudo.GetEscvida() << " " << orcs[i].IsHero() << endl;
 
             }
 
@@ -852,9 +905,9 @@ void EscolherLuta()
         {
             ofstream fadas("elfos.txt");
 
-            for(size_t i = 0; i < orcs.size(); i++)
+            for(size_t i = 0; i < elfos.size(); i++)
             {
-                fadas << i << " "<< elfos[i].lutador.Getname() << " " << elfos[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << elfos[i].lutador.Getdefense() << " " << elfos[i].lutador.Getesquiva() << " " << elfos[i].arma.GetnomeArma() << " " << elfos[i].arma.GetdanoArma() << " " << elfos[i].arma.GetcriticoArma() << " " << elfos[i].arma.GetvelocidadeArma() << " " << elfos[i].escudo.GetEscnome() << " " << elfos[i].escudo.GetEscblock() << " " << elfos[i].escudo.GetEscdefesa() << " " << elfos[i].escudo.GetEscvida() << endl;
+                fadas << i << " "<< elfos[i].lutador.Getname() << " " << elfos[i].lutador.Getlife() << " " << orcs[i].lutador.Getattack() << " " << elfos[i].lutador.Getdefense() << " " << elfos[i].lutador.Getesquiva() << " " << elfos[i].arma.GetnomeArma() << " " << elfos[i].arma.GetdanoArma() << " " << elfos[i].arma.GetcriticoArma() << " " << elfos[i].arma.GetvelocidadeArma() << " " << elfos[i].escudo.GetEscnome() << " " << elfos[i].escudo.GetEscblock() << " " << elfos[i].escudo.GetEscdefesa() << " " << elfos[i].escudo.GetEscvida() << " " << elfos[i].IsHero() << endl;
 
             }
 
@@ -867,7 +920,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < demonios.size(); i++)
             {
-                inferno << i << " "<< demonios[i].lutador.Getname() << " " << demonios[i].lutador.Getlife() << " " << demonios[i].lutador.Getattack() << " " << demonios[i].lutador.Getdefense() << " " << demonios[i].lutador.Getesquiva() << " " << demonios[i].arma.GetnomeArma() << " " << demonios[i].arma.GetdanoArma() << " " << demonios[i].arma.GetcriticoArma() << " " << demonios[i].arma.GetvelocidadeArma() << " " << demonios[i].escudo.GetEscnome() << " " << demonios[i].escudo.GetEscblock() << " " << demonios[i].escudo.GetEscdefesa() << " " << demonios[i].escudo.GetEscvida() << endl;
+                inferno << i << " "<< demonios[i].lutador.Getname() << " " << demonios[i].lutador.Getlife() << " " << demonios[i].lutador.Getattack() << " " << demonios[i].lutador.Getdefense() << " " << demonios[i].lutador.Getesquiva() << " " << demonios[i].arma.GetnomeArma() << " " << demonios[i].arma.GetdanoArma() << " " << demonios[i].arma.GetcriticoArma() << " " << demonios[i].arma.GetvelocidadeArma() << " " << demonios[i].escudo.GetEscnome() << " " << demonios[i].escudo.GetEscblock() << " " << demonios[i].escudo.GetEscdefesa() << " " << demonios[i].escudo.GetEscvida() << " " << demonios[i].IsHero() << endl;
 
             }
 
@@ -880,7 +933,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < draconatos.size(); i++)
             {
-                raaaw << i << " "<< draconatos[i].lutador.Getname() << " " << draconatos[i].lutador.Getlife() << " " << draconatos[i].lutador.Getattack() << " " << draconatos[i].lutador.Getdefense() << " " << draconatos[i].lutador.Getesquiva() << " " << draconatos[i].arma.GetnomeArma() << " " << draconatos[i].arma.GetdanoArma() << " " << draconatos[i].arma.GetcriticoArma() << " " << draconatos[i].arma.GetvelocidadeArma() << " " << draconatos[i].escudo.GetEscnome() << " " << draconatos[i].escudo.GetEscblock() << " " << draconatos[i].escudo.GetEscdefesa() << " " << draconatos[i].escudo.GetEscvida() << endl;
+                raaaw << i << " "<< draconatos[i].lutador.Getname() << " " << draconatos[i].lutador.Getlife() << " " << draconatos[i].lutador.Getattack() << " " << draconatos[i].lutador.Getdefense() << " " << draconatos[i].lutador.Getesquiva() << " " << draconatos[i].arma.GetnomeArma() << " " << draconatos[i].arma.GetdanoArma() << " " << draconatos[i].arma.GetcriticoArma() << " " << draconatos[i].arma.GetvelocidadeArma() << " " << draconatos[i].escudo.GetEscnome() << " " << draconatos[i].escudo.GetEscblock() << " " << draconatos[i].escudo.GetEscdefesa() << " " << draconatos[i].escudo.GetEscvida() << " " << draconatos[i].IsHero() << endl;
 
             }
 
@@ -1077,7 +1130,7 @@ void EscolherLuta()
 
             for(size_t i = 0; i < orcs.size(); i++)
             {
-                cout << endl << "Nome: " << orcs[i].lutador.Getname() << endl;
+                cout << endl << "Nome: " << orcs[i].lutador.Getname() << (orcs[i].IsHero() ? " (H)" : "") << endl;
 
                 cout << "/-------------------Status -------------------/" << endl;
 
@@ -1112,7 +1165,7 @@ void EscolherLuta()
 
                 for(size_t i = 0; i < elfos.size(); i++)
                 {
-                    cout << endl << "Nome: " << elfos[i].lutador.Getname() << endl;
+                    cout << endl << "Nome: " << elfos[i].lutador.Getname() << (elfos[i].IsHero() ? " (H)" : "") << endl;
 
                     cout << "/-------------------Status -------------------/" << endl;
 
@@ -1147,7 +1200,7 @@ void EscolherLuta()
 
                 for(size_t i = 0; i < demonios.size(); i++)
                 {
-                    cout << endl << "Nome: " << demonios[i].lutador.Getname() << endl;
+                    cout << endl << "Nome: " << demonios[i].lutador.Getname() << (demonios[i].IsHero() ? " (H)" : "") << endl;
 
                     cout << "/-------------------Status -------------------/" << endl;
 
@@ -1183,7 +1236,7 @@ void EscolherLuta()
 
                 for(size_t i = 0; i < draconatos.size(); i++)
                 {
-                    cout << endl << "Nome: " << draconatos[i].lutador.Getname() << endl;
+                    cout << endl << "Nome: " << draconatos[i].lutador.Getname() << (draconatos[i].IsHero() ? " (H)" : "") << endl;
 
                     cout << "/-------------------Status -------------------/" << endl;
 
@@ -1275,7 +1328,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida
+                    Escnome, Escblock, Escdefesa, Escvida, (rand() % 10 == 0)
                 );
             }
         }
@@ -1307,7 +1360,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida
+                    Escnome, Escblock, Escdefesa, Escvida, (rand() % 10 == 0)
                 );
             }
         }
@@ -1340,7 +1393,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida
+                    Escnome, Escblock, Escdefesa, Escvida, (rand() % 10 == 0)
                 );
             }
         }
@@ -1372,7 +1425,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida
+                    Escnome, Escblock, Escdefesa, Escvida, (rand() % 10 == 0)
                 );
             }
         }
