@@ -3,7 +3,7 @@
 #include "nomes.hpp"
 #include <cstdlib>
 #include <ctime>
-
+//Allef e Kauan
 
 void menu();
 void submenu();
@@ -1242,7 +1242,7 @@ void EscolherLuta()
                     nome, life, attack, defense,
                     nomeArma, danoArma, criticoArma,
                     esquiva, velocidade,
-                    Escnome, Escblock, Escdefesa, Escvida, rand() % 2
+                    Escnome, Escblock, Escdefesa, Escvida, (rand() % 10 == 0)
                 );
             }
         }

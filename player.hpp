@@ -179,6 +179,14 @@ public:
          }
 
          opponent.lutador.SetLife(opponent.lutador.Getlife() - dano);
+
+         if(m_isHero && dano > 0 && (rand() % 3 == 0))
+         {
+            float vamp = dano*0.30f;
+            lutador.SetLife(lutador.Getlife() + vamp);
+            cout << " Blood, ohhh Blood +" << vamp << " life!";
+
+         }
          return true;
      }
  };
