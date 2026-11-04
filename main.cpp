@@ -3,6 +3,8 @@
 #include <fstream>
 #include <cstdlib>
 #include <ctime>
+//Allef William 26104787
+//Kauan Rocha 26150624
 
 // prototipos
 
